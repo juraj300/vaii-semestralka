@@ -1,7 +1,101 @@
+/* 1. Global Styles */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+/* 2. Navbar Styling */
 .navbar {
-    border-bottom: 1px solid grey;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: #ffffff !important;
 }
 
 .navbar-brand img {
-    width: 50px;
+    height: 40px;
+    width: auto;
+}
+
+/* 3. Card Customization */
+.card {
+    border: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+}
+
+/* 4. Card Hover Effect (Specific to specific cards if needed, applying generally here for demo) */
+.card:hover {
+    transform: translateY(-2px);
+}
+
+/* 5. Call Room Specifics */
+#script-body {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #2c3e50;
+    min-height: 200px;
+    background-color: #fff;
+    border-left: 4px solid #0d6efd !important; /* Bootstrap primary color */
+}
+
+/* 6. Lead Info Highlights */
+#lead-info h3 {
+    color: #0d6efd;
+    font-weight: 600;
+}
+
+#lead-info strong {
+    color: #495057;
+}
+
+/* 7. Buttons Customization */
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+/* 8. Outcome Buttons */
+.btn-check:checked + .btn-outline-info,
+.btn-check:checked + .btn-outline-warning,
+.btn-check:checked + .btn-outline-success,
+.btn-check:checked + .btn-outline-danger {
+    color: white;
+    font-weight: bold;
+}
+
+/* 9. Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* 10. Table Styling */
+.table th {
+    background-color: #e9ecef;
+    color: #495057;
+    font-weight: 600;
+}
+
+/* 11. Links in tables */
+.table a {
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* 12. Alert styling */
+.alert {
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
