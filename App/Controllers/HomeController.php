@@ -39,7 +39,7 @@ class HomeController extends BaseController
      */
     public function index(Request $request): Response
     {
-        return $this->html();
+        return $this->redirect($this->url('auth.login'));
     }
 
     /**

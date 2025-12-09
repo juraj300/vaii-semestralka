@@ -19,7 +19,7 @@ class Configuration
     /**
      * Application name.
      */
-    public const APP_NAME = 'Vaííčko MVC FW';
+    public const APP_NAME = 'Call Assistant';
 
     /**
      * Version of the framework.
