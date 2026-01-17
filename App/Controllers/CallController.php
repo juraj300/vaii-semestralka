@@ -35,7 +35,7 @@ class CallController extends SecureController
             return $this->redirect($this->url('lead.index'));
         }
 
-        }
+
 
         // Fetch all available scripts for dropdown
         $scripts = Script::getAll();
@@ -55,34 +55,38 @@ class CallController extends SecureController
 
     public function logCall(Request $request): Response
     {
-        $leadId = $request->value('lead_id');
-        $outcome = $request->value('outcome');
-        $notes = $request->value('notes');
+        try {
+            $leadId = $request->value('lead_id');
+            $outcome = $request->value('outcome');
+            $notes = $request->value('notes');
 
-        // Basic server validation
-        if (!$leadId || !$outcome) {
-            return new JsonResponse(['status' => 'error', 'message' => 'Missing required fields']);
+            // Basic server validation
+            if (!$leadId || !$outcome) {
+                return new JsonResponse(['status' => 'error', 'message' => 'Missing required fields']);
+            }
+
+            $lead = Lead::getOne($leadId);
+            if (!$lead) {
+                return new JsonResponse(['status' => 'error', 'message' => 'Lead not found']);
+            }
+
+            // Save Call
+            $call = new Call();
+            $call->lead_id = $leadId;
+            $call->user_id = $this->user->getIdentity()->id;
+            $call->outcome = $outcome;
+            $call->notes = $notes;
+            $call->save();
+
+            // Update Lead Status
+            $lead->status = $outcome === 'closed_won' ? Lead::STATUS_CLOSED_WON : 
+                        ($outcome === 'closed_lost' ? Lead::STATUS_CLOSED_LOST : Lead::STATUS_CONTACTED);
+            $lead->save();
+
+            return new JsonResponse(['status' => 'success']);
+        } catch (\Throwable $e) {
+            return new JsonResponse(['status' => 'error', 'message' => $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine()]);
         }
-
-        $lead = Lead::getOne($leadId);
-        if (!$lead) {
-            return new JsonResponse(['status' => 'error', 'message' => 'Lead not found']);
-        }
-
-        // Save Call
-        $call = new Call();
-        $call->lead_id = $leadId;
-        $call->user_id = $this->user->getIdentity()->id;
-        $call->outcome = $outcome;
-        $call->notes = $notes;
-        $call->save();
-
-        // Update Lead Status
-        $lead->status = $outcome === 'closed_won' ? Lead::STATUS_CLOSED_WON : 
-                       ($outcome === 'closed_lost' ? Lead::STATUS_CLOSED_LOST : Lead::STATUS_CONTACTED);
-        $lead->save();
-
-        return new JsonResponse(['status' => 'success']);
     }
 
     public function nextLead(Request $request): Response

@@ -86,4 +86,5 @@
     const NEXT_LEAD_URL = "<?= $link->url('call.nextLead') ?>";
     const LEAD_INDEX_URL = "<?= $link->url('lead.index') ?>";
     const ALL_SCRIPTS = <?= json_encode($scripts ?? []) ?>;
+    const CSRF_TOKEN = "<?= \App\Auth\Csrf::getToken() ?>";
 </script>

@@ -67,12 +67,27 @@ window.saveCall = async function () {
         formData.append('lead_id', currentLeadId);
         formData.append('outcome', outcome);
         formData.append('notes', notes);
+        formData.append('csrf_token', CSRF_TOKEN);
 
         const responseLog = await fetch(LOG_CALL_URL, {
             method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            },
             body: formData
         });
-        const resultLog = await responseLog.json();
+        const responseText = await responseLog.text();
+        let resultLog;
+        try {
+            resultLog = JSON.parse(responseText);
+        } catch (e) {
+            console.error("Failed to parse JSON response:", responseText);
+            alert("Server Error (Not JSON): " + responseText.substring(0, 500)); // Show first 500 chars
+            saveBtn.disabled = false;
+            saveBtn.innerText = "Save & Next";
+            return;
+        }
 
         if (resultLog.status !== 'success') {
             alert("Error saving call: " + (resultLog.message || 'Unknown error'));
@@ -84,12 +99,27 @@ window.saveCall = async function () {
         // 2. Load Next Lead
         const formDataNext = new FormData();
         formDataNext.append('current_id', currentLeadId);
+        formDataNext.append('csrf_token', CSRF_TOKEN);
 
         const responseNext = await fetch(NEXT_LEAD_URL, {
             method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            },
             body: formDataNext
         });
-        const resultNext = await responseNext.json();
+        const responseNextText = await responseNext.text();
+        let resultNext;
+        try {
+            resultNext = JSON.parse(responseNextText);
+        } catch (e) {
+            console.error("Failed to parse JSON response:", responseNextText);
+            alert("Server Error (Next Lead): " + responseNextText.substring(0, 500));
+            saveBtn.disabled = false;
+            saveBtn.innerText = "Save & Next";
+            return;
+        }
 
         if (resultNext.status === 'found') {
             updateRoom(resultNext.lead, resultNext.script_body);

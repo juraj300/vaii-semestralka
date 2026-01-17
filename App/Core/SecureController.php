@@ -15,7 +15,12 @@ abstract class SecureController extends BaseController
         if ($request->isPost()) { // Framework Request currently mainly supports isPost() helper
             $token = $request->value('csrf_token');
             if (!Csrf::verifyToken($token)) {
-                // For AJAX, might want JSON response, but simple die/exception is safer default
+                if ($request->isAjax() || $request->wantsJson()) {
+                    header('Content-Type: application/json');
+                    http_response_code(403);
+                    echo json_encode(['status' => 'error', 'message' => 'CSRF Token Invalid']);
+                    exit;
+                }
                 die("CSRF Validation Failed");
             }
         }
