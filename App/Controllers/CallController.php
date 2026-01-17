@@ -5,12 +5,12 @@ namespace App\Controllers;
 use App\Models\Call;
 use App\Models\Lead;
 use App\Models\Script;
-use Framework\Core\BaseController;
+use App\Core\SecureController;
 use Framework\Http\Request;
 use Framework\Http\Responses\JsonResponse;
 use Framework\Http\Responses\Response;
 
-class CallController extends BaseController
+class CallController extends SecureController
 {
     public function index(Request $request): Response
     {
@@ -19,6 +19,9 @@ class CallController extends BaseController
 
     public function authorize(Request $request, string $action): bool
     {
+        if (!parent::authorize($request, $action)) {
+            return false;
+        }
         return $this->user->isLoggedIn();
     }
 

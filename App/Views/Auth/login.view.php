@@ -17,6 +17,7 @@ $view->setLayout('auth');
                         <?= @$message ?>
                     </div>
                     <form class="form-signin" method="post" action="<?= $link->url("login") ?>">
+    <?= \App\Auth\Csrf::input() ?>
                         <div class="form-label-group mb-3">
                             <label for="username" class="form-label">Username</label>
                             <input name="username" type="text" id="username" class="form-control" placeholder="Username"

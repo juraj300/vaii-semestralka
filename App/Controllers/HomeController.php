@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use Framework\Core\BaseController;
+use App\Core\SecureController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 
@@ -15,7 +15,7 @@ use Framework\Http\Responses\Response;
  *
  * @package App\Controllers
  */
-class HomeController extends BaseController
+class HomeController extends SecureController
 {
     /**
      * Authorizes controller actions based on the specified action name.

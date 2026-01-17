@@ -6,6 +6,7 @@
 <h1>Edit Script</h1>
 
 <form action="<?= $link->url('script.update') ?>" method="POST">
+    <?= \App\Auth\Csrf::input() ?>
     <input type="hidden" name="id" value="<?= $script->id ?>">
     
     <div class="mb-3">

@@ -3,8 +3,8 @@
 namespace App\Controllers;
 
 use App\Configuration;
+use App\Core\SecureController;
 use Exception;
-use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 use Framework\Http\Responses\ViewResponse;
@@ -17,7 +17,7 @@ use Framework\Http\Responses\ViewResponse;
  *
  * @package App\Controllers
  */
-class AuthController extends BaseController
+class AuthController extends SecureController
 {
     /**
      * Redirects to the login page.

@@ -3,14 +3,19 @@
 namespace App\Controllers;
 
 use App\Models\Lead;
-use Framework\Core\BaseController;
+use App\Core\SecureController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 
-class LeadController extends BaseController
+class LeadController extends SecureController
 {
     public function authorize(Request $request, string $action): bool
     {
+        // 1. Run parent checks (CSRF)
+        if (!parent::authorize($request, $action)) {
+            return false;
+        }
+
         // Only logged in users can manage leads
         return $this->user->isLoggedIn();
     }
@@ -78,7 +83,9 @@ class LeadController extends BaseController
             return $this->redirect($this->url('lead.index'));
         }
 
-        return $this->html(compact('lead'));
+        $attachments = \App\Models\Attachment::getAll("lead_id = ?", [$lead->id]);
+
+        return $this->html(compact('lead', 'attachments'));
     }
 
     public function update(Request $request): Response
@@ -123,6 +130,56 @@ class LeadController extends BaseController
             $lead->delete();
         }
 
+        return $this->redirect($this->url('lead.index'));
+    }
+
+    public function upload(Request $request): Response
+    {
+        $id = $request->value('id');
+        $lead = Lead::getOne($id);
+
+        if (!$lead || (!$this->user->getIdentity()->isAdmin() && $lead->owner_id !== $this->user->getIdentity()->id)) {
+             return $this->redirect($this->url('lead.index'));
+        }
+
+        if (isset($_FILES['attachment']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK) {
+            $file = $_FILES['attachment'];
+            $uploadDir = __DIR__ . '/../../public/uploads/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+            
+            $filename = uniqid() . '_' . basename($file['name']);
+            $targetPath = $uploadDir . $filename;
+            
+            if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+                $attachment = new \App\Models\Attachment();
+                $attachment->lead_id = $lead->id;
+                $attachment->filename = $file['name']; // Original name
+                $attachment->path = $filename; // Stored name
+                $attachment->save();
+            }
+        }
+
+        return $this->redirect($this->url('lead.edit', ['id' => $lead->id]));
+    }
+
+    public function deleteAttachment(Request $request): Response
+    {
+        $id = $request->value('id'); // Attachment ID
+        $attachment = \App\Models\Attachment::getOne($id);
+
+        if ($attachment) {
+            $lead = Lead::getOne($attachment->lead_id);
+            if ($lead && ($this->user->getIdentity()->isAdmin() || $lead->owner_id === $this->user->getIdentity()->id)) {
+                $filePath = __DIR__ . '/../../public/uploads/' . $attachment->path;
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
+                $attachment->delete();
+                return $this->redirect($this->url('lead.edit', ['id' => $lead->id]));
+            }
+        }
         return $this->redirect($this->url('lead.index'));
     }
 }

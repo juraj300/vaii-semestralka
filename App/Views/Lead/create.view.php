@@ -16,6 +16,7 @@
 <?php endif; ?>
 
 <form action="<?= $link->url('lead.store') ?>" method="POST" class="mt-4" novalidate> <!-- Client validation added later via JS -->
+    <?= \App\Auth\Csrf::input() ?>
     <div class="mb-3">
         <label for="company" class="form-label">Company Name *</label>
         <input type="text" class="form-control" id="company" name="company" required>

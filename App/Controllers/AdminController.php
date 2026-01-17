@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use Framework\Core\BaseController;
+use App\Core\SecureController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 
@@ -14,7 +14,7 @@ use Framework\Http\Responses\Response;
  *
  * @package App\Controllers
  */
-class AdminController extends BaseController
+class AdminController extends SecureController
 {
     /**
      * Authorizes actions in this controller.
@@ -39,6 +39,19 @@ class AdminController extends BaseController
      */
     public function index(Request $request): Response
     {
-        return $this->html();
+        // Simple Dashboard Statistics
+        $totalLeads = \App\Models\Lead::getCount();
+        $totalCalls = \App\Models\Call::getCount();
+        
+        // Calculate conversion rate (Closed Won / Total Leads)
+        $wonLeads = \App\Models\Lead::getCount("status = 'closed_won'");
+        $conversionRate = $totalLeads > 0 ? round(($wonLeads / $totalLeads) * 100, 1) : 0;
+        
+        // Leads by status
+        $newLeads = \App\Models\Lead::getCount("status = 'new'");
+        $interestedLeads = \App\Models\Lead::getCount("status = 'interested'");
+
+
+        return $this->html(compact('totalLeads', 'totalCalls', 'conversionRate', 'newLeads', 'interestedLeads'));
     }
 }

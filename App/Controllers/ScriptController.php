@@ -3,14 +3,17 @@
 namespace App\Controllers;
 
 use App\Models\Script;
-use Framework\Core\BaseController;
+use App\Core\SecureController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 
-class ScriptController extends BaseController
+class ScriptController extends SecureController
 {
     public function authorize(Request $request, string $action): bool
     {
+        if (!parent::authorize($request, $action)) {
+            return false;
+        }
         // Only Admin can manage scripts
         return $this->user->getIdentity()->isAdmin();
     }

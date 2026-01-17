@@ -16,6 +16,7 @@
 <?php endif; ?>
 
 <form action="<?= $link->url('script.store') ?>" method="POST">
+    <?= \App\Auth\Csrf::input() ?>
     <div class="mb-3">
         <label for="name" class="form-label">Script Name</label>
         <input type="text" class="form-control" id="name" name="name" required>
