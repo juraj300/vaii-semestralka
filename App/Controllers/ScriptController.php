@@ -32,7 +32,7 @@ class ScriptController extends SecureController
 
     public function create(Request $request): Response
     {
-        return $this->html(null, 'create');
+        return $this->html([], 'create');
     }
 
     public function store(Request $request): Response
@@ -46,7 +46,7 @@ class ScriptController extends SecureController
         if (empty($body)) $errors[] = "Body is required";
 
         if (!empty($errors)) {
-            return $this->view('script.create', ['errors' => $errors]);
+            return $this->html(['errors' => $errors], 'create');
         }
 
         if ($is_default) {

@@ -54,11 +54,18 @@ class LeadController extends SecureController
         if (empty($company)) $errors[] = "Company is required";
         if (empty($contact_name)) $errors[] = "Contact Name is required";
         if (empty($phone)) $errors[] = "Phone is required";
-        // Phone validation (regex) - simplistic for now
-        if (!preg_match('/^[0-9+\-\s]+$/', $phone)) $errors[] = "Invalid phone format";
+        
+        if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = "Invalid email format";
+        }
+        
+        // Phone validation (regex)
+        if (!empty($phone) && !preg_match('/^[0-9+\-\s]{7,20}$/', $phone)) {
+            $errors[] = "Invalid phone format (min 7 digits, plus/minus/space allowed)";
+        }
 
         if (!empty($errors)) {
-            return $this->view('lead.create', ['errors' => $errors]);
+            return $this->html(['errors' => $errors], 'create');
         }
 
         $lead = new Lead();
@@ -107,8 +114,15 @@ class LeadController extends SecureController
         if (empty($company)) $errors[] = "Company is required";
         if (empty($contact_name)) $errors[] = "Contact Name is required";
         
+        if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = "Invalid email format";
+        }
+
+        if (!empty($phone) && !preg_match('/^[0-9+\-\s]{7,20}$/', $phone)) {
+            $errors[] = "Invalid phone format";
+        }
         if (!empty($errors)) {
-             return $this->view('lead.edit', ['lead' => $lead, 'errors' => $errors]);
+             return $this->html(['lead' => $lead, 'errors' => $errors], 'edit');
         }
 
         $lead->company = $company;
@@ -155,6 +169,7 @@ class LeadController extends SecureController
             if (move_uploaded_file($file['tmp_name'], $targetPath)) {
                 $attachment = new \App\Models\Attachment();
                 $attachment->lead_id = $lead->id;
+                $attachment->user_id = $this->user->getIdentity()->id;
                 $attachment->filename = $file['name']; // Original name
                 $attachment->path = $filename; // Stored name
                 $attachment->save();
@@ -181,5 +196,68 @@ class LeadController extends SecureController
             }
         }
         return $this->redirect($this->url('lead.index'));
+    }
+    public function import(Request $request): Response
+    {
+        $errors = [];
+        $count = 0;
+
+        if ($request->isPost()) {
+            if (isset($_FILES['csv']) && $_FILES['csv']['error'] === UPLOAD_ERR_OK) {
+                $file = $_FILES['csv'];
+                $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+                if (strtolower($ext) !== 'csv') {
+                    $errors[] = "Only CSV files are allowed.";
+                } else {
+                    $handle = fopen($file['tmp_name'], 'r');
+                    $headers = fgetcsv($handle);
+                    $expected = ['company', 'contact_name', 'phone', 'email'];
+                    
+                    if (!$headers || count(array_intersect($expected, $headers)) < 3) {
+                        $errors[] = "CSV must have headers: company, contact_name, phone, email.";
+                    } else {
+                        $headerMap = array_flip($headers);
+                        while (($row = fgetcsv($handle)) !== false) {
+                            if (count($row) < 3) continue;
+                            
+                            $lead = new \App\Models\Lead();
+                            $lead->company = $row[$headerMap['company']] ?? '';
+                            $lead->contact_name = $row[$headerMap['contact_name']] ?? '';
+                            $lead->phone = $row[$headerMap['phone']] ?? '';
+                            $lead->email = $row[$headerMap['email']] ?? null;
+                            $lead->owner_id = $this->user->getIdentity()->id;
+                            $lead->status = \App\Models\Lead::STATUS_NEW;
+
+                            if (!empty($lead->company) && !empty($lead->contact_name)) {
+                                $lead->save();
+                                $count++;
+                            }
+                        }
+                        fclose($handle);
+                        if ($count > 0) {
+                            return $this->redirect($this->url('lead.index', ['message' => "$count leads imported."]));
+                        }
+                        $errors[] = "No valid leads found.";
+                    }
+                }
+            } else {
+                $errors[] = "Please select a file.";
+            }
+        }
+        return $this->html(compact('errors'));
+    }
+
+    public function search(Request $request): Response
+    {
+        $q = $request->value('q');
+        $where = "company LIKE ? OR contact_name LIKE ?";
+        $params = ["%$q%", "%$q%"];
+        
+        if (!$this->user->getIdentity()->isAdmin()) {
+            $where = "($where) AND owner_id = ?";
+            $params[] = $this->user->getIdentity()->id;
+        }
+
+        return $this->html(compact('leads'), 'index_rows');
     }
 }

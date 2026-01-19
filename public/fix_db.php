@@ -4,23 +4,25 @@ use Framework\DB\Connection;
 
 require_once __DIR__ . '/../Framework/ClassLoader.php';
 
-$loader = new \Framework\ClassLoader();
-$loader->register();
-
 try {
-    $sql = "CREATE TABLE IF NOT EXISTS `attachments` (
+    // We recreate the table to avoid complex ALTER migrations for this semester project tool
+    $sql = "DROP TABLE IF EXISTS `attachments`;
+    CREATE TABLE `attachments` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
-      `lead_id` int(11) NOT NULL,
+      `lead_id` int(11) DEFAULT NULL,
+      `user_id` int(11) NOT NULL,
       `filename` varchar(255) NOT NULL,
       `path` varchar(255) NOT NULL,
       `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
       PRIMARY KEY (`id`),
       KEY `lead_id` (`lead_id`),
-      CONSTRAINT `attachments_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`) ON DELETE CASCADE
+      KEY `user_id` (`user_id`),
+      CONSTRAINT `attachments_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`) ON DELETE CASCADE,
+      CONSTRAINT `attachments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
     Connection::getInstance()->exec($sql);
-    echo "<h1>Success!</h1><p>Table 'attachments' created successfully.</p><a href='/?c=lead'>Go back to Leads</a>";
+    echo "<h1>Success!</h1><p>Table 'attachments' updated successfully.</p><a href='/?c=lead'>Go back to Leads</a>";
 
 } catch (PDOException $e) {
     echo "<h1>Error</h1><p>" . $e->getMessage() . "</p>";

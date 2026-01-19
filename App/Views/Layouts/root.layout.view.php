@@ -23,40 +23,42 @@
     <link rel="stylesheet" href="<?= $link->asset('css/styl.css') ?>">
     <script src="<?= $link->asset('js/script.js') ?>"></script>
 </head>
-<body>
-<nav class="navbar navbar-expand-sm bg-light">
-    <div class="container-fluid">
+<body class="dark-mode">
+<nav class="navbar navbar-expand-sm sticky-top navbar-dark">
+    <div class="container">
         <a class="navbar-brand" href="<?= $link->url('home.index') ?>">
-            <img src="<?= $link->asset('images/vaiicko_logo.png') ?>" title="<?= App\Configuration::APP_NAME ?>" alt="Framework Logo">
+            <img src="<?= $link->asset('images/vaiicko_logo.png') ?>" title="<?= App\Configuration::APP_NAME ?>" alt="Logo">
         </a>
-        <ul class="navbar-nav me-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="<?= $link->url('home.contact') ?>">Contact</a>
-            </li>
-        </ul>
-        <?php if ($user->isLoggedIn()) { ?>
-            <span class="navbar-text">Logged in user: <b><?= $user->getName() ?></b></span>
-            <ul class="navbar-nav ms-auto">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                      <a class="nav-link" href="<?= $link->url('script.index') ?>">Scripts</a>
                 </li>
                 <li class="nav-item">
                      <a class="nav-link" href="<?= $link->url('lead.index') ?>">Leads</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= $link->url('auth.logout') ?>">Log out</a>
-                </li>
+                <?php if ($user->isLoggedIn()) { ?>
+                    <li class="nav-item">
+                         <a class="nav-link" href="<?= $link->url('file.index') ?>">Files</a>
+                    </li>
+                <?php } ?>
             </ul>
-        <?php } else { ?>
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= App\Configuration::LOGIN_URL ?>">Log in</a>
-                </li>
-                <li class="nav-item">
-                     <a class="nav-link" href="<?= $link->url('auth.register') ?>">Register</a>
-                </li>
-            </ul>
-        <?php } ?>
+            
+            <div class="d-flex align-items-center">
+                <?php if ($user->isLoggedIn()) { ?>
+                    <span class="navbar-text me-3 d-none d-lg-inline">
+                        <i class="bi bi-person-circle"></i> <?= htmlspecialchars($user->getName()) ?>
+                    </span>
+                    <a href="<?= $link->url('auth.logout') ?>" class="btn btn-outline-danger btn-sm">Log out</a>
+                <?php } else { ?>
+                    <a class="nav-link me-3" href="<?= App\Configuration::LOGIN_URL ?>">Log in</a>
+                    <a href="<?= $link->url('auth.register') ?>" class="btn btn-primary btn-sm">Join Now</a>
+                <?php } ?>
+            </div>
+        </div>
     </div>
 </nav>
 <div class="container-fluid mt-3">

@@ -168,3 +168,25 @@ function updateRoom(lead, scriptBody) {
     container.classList.add('fade-in');
     setTimeout(() => container.classList.remove('fade-in'), 500);
 }
+
+/**
+ * Live search for Leads
+ */
+window.liveSearch = async function (query) {
+    if (typeof LEAD_SEARCH_URL === 'undefined') return;
+
+    const tbody = document.getElementById('leads-table-body');
+    if (!tbody) return;
+
+    try {
+        const response = await fetch(`${LEAD_SEARCH_URL}&q=${encodeURIComponent(query)}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+        const html = await response.text();
+        tbody.innerHTML = html;
+    } catch (e) {
+        console.error("Search failed", e);
+    }
+};

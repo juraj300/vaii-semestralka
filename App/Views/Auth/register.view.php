@@ -4,7 +4,7 @@
 /** @var \Framework\Support\LinkGenerator $link */
 ?>
 
-<div class="row justify-content-center">
+<div class="row justify-content-center fade-in">
     <div class="col-md-6 col-lg-4">
         <h2 class="text-center mb-4">Register</h2>
 

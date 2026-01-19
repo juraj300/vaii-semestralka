@@ -69,7 +69,7 @@ class AuthController extends SecureController
     public function logout(Request $request): Response
     {
         $this->app->getAuthenticator()->logout();
-        return $this->html();
+        return $this->redirect($this->url('home.index'));
     }
 
     /**
@@ -89,6 +89,12 @@ class AuthController extends SecureController
             // Basic validation
             if (empty($name) || empty($email) || empty($password)) {
                 $message = "All fields are required.";
+            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $message = "Invalid email format.";
+            } elseif (strlen($password) < 6) {
+                $message = "Password must be at least 6 characters long.";
+            } elseif (strlen($name) < 2 || strlen($name) > 50) {
+                $message = "Name must be between 2 and 50 characters.";
             } else {
                 // Check if email already exists
                 $existingUser = User::getAll('email = ?', [$email]);

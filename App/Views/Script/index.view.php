@@ -3,6 +3,7 @@
 /** @var \Framework\Support\LinkGenerator $link */
 ?>
 
+<div class="fade-in">
 <div class="row mb-3">
     <div class="col-6">
         <h1>Manage Scripts</h1>
