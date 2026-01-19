@@ -20,11 +20,11 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="<?= $link->asset('css/styl.css') ?>">
-    <script src="<?= $link->asset('js/script.js') ?>"></script>
+    <link rel="stylesheet" href="<?= $link->asset('css/styl.css') ?>?v=2">
+    <script src="<?= $link->asset('js/script.js') ?>?v=2"></script>
 </head>
 <body class="dark-mode">
-<nav class="navbar navbar-expand-sm sticky-top navbar-dark">
+<nav class="navbar navbar-expand-lg sticky-top navbar-dark">
     <div class="container">
         <a class="navbar-brand" href="<?= $link->url('home.index') ?>">
             <img src="<?= $link->asset('images/vaiicko_logo.png') ?>" title="<?= App\Configuration::APP_NAME ?>" alt="Logo">
@@ -42,20 +42,28 @@
                 </li>
                 <?php if ($user->isLoggedIn()) { ?>
                     <li class="nav-item">
+                         <a class="nav-link" href="<?= $link->url('calendar.index') ?>">Calendar</a>
+                    </li>
+                    <li class="nav-item">
                          <a class="nav-link" href="<?= $link->url('file.index') ?>">Files</a>
                     </li>
+                    <?php if ($user->getIdentity()->isAdmin()) { ?>
+                        <li class="nav-item">
+                             <a class="nav-link" href="<?= $link->url('admin.index') ?>">Users</a>
+                        </li>
+                    <?php } ?>
                 <?php } ?>
             </ul>
             
-            <div class="d-flex align-items-center">
+            <div class="navbar-nav ms-auto align-items-center">
                 <?php if ($user->isLoggedIn()) { ?>
-                    <span class="navbar-text me-3 d-none d-lg-inline">
-                        <i class="bi bi-person-circle"></i> <?= htmlspecialchars($user->getName()) ?>
+                    <span class="navbar-text me-3 d-none d-xl-inline">
+                         <?= htmlspecialchars($user->getName()) ?>
                     </span>
                     <a href="<?= $link->url('auth.logout') ?>" class="btn btn-outline-danger btn-sm">Log out</a>
                 <?php } else { ?>
                     <a class="nav-link me-3" href="<?= App\Configuration::LOGIN_URL ?>">Log in</a>
-                    <a href="<?= $link->url('auth.register') ?>" class="btn btn-primary btn-sm">Join Now</a>
+                    <a href="<?= $link->url('auth.register') ?>" class="btn btn-primary btn-sm">Join</a>
                 <?php } ?>
             </div>
         </div>

@@ -10,17 +10,18 @@
     --text-muted: #94a3b8;
     --accent-success: #10b981;
     --accent-error: #ef4444;
-    --glass-bg: rgba(30, 41, 59, 0.7);
+    --glass-bg: rgba(15, 23, 42, 0.95);
     --border-color: rgba(255, 255, 255, 0.1);
 }
 
 /* 1. Global Styles */
+html,
 body {
-    background-color: var(--bg-color);
+    background-color: var(--bg-color) !important;
+    color: var(--text-main) !important;
     font-family: 'Inter', sans-serif;
-    color: var(--text-main);
     line-height: 1.6;
-    overflow-x: hidden;
+    min-height: 100vh;
 }
 
 /* 2. Navbar Styling */
@@ -29,52 +30,44 @@ body {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border-color);
-    padding: 1rem 0;
+    padding: 0.75rem 0;
     transition: all 0.3s ease;
 }
 
 .navbar-brand img {
     height: 40px;
-    width: auto;
-    filter: brightness(1.2);
+    filter: brightness(1.2) drop-shadow(0 0 10px rgba(14, 165, 233, 0.2));
 }
 
 .nav-link {
-    color: var(--text-muted) !important;
+    color: var(--text-main) !important;
     font-weight: 500;
     padding: 0.5rem 1rem !important;
-    transition: color 0.2s ease;
+    transition: all 0.2s ease;
+    opacity: 0.8;
 }
 
 .nav-link:hover,
 .nav-link.active {
     color: var(--primary-color) !important;
+    opacity: 1;
 }
 
 .navbar-text {
-    color: var(--text-main);
+    color: var(--text-muted);
 }
 
 /* 3. Card Customization */
 .card {
-    background: var(--surface-color);
-    border: 1px solid var(--border-color);
+    background: var(--surface-color) !important;
+    border: 1px solid var(--border-color) !important;
     border-radius: 16px;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
     color: var(--text-main);
 }
 
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
-    border-color: var(--primary-color);
-}
-
-.card-header {
-    background: rgba(255, 255, 255, 0.03);
-    border-bottom: 1px solid var(--border-color);
-    padding: 1.25rem;
+.surface-light {
+    background-color: var(--surface-lighter) !important;
 }
 
 /* 4. Buttons Customization */
@@ -82,7 +75,6 @@ body {
     border-radius: 10px;
     padding: 0.6rem 1.5rem;
     font-weight: 600;
-    transition: all 0.2s ease;
 }
 
 .btn-primary {
@@ -92,19 +84,8 @@ body {
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, var(--primary-hover), var(--primary-color));
-    transform: scale(1.02);
-    box-shadow: 0 0 15px rgba(14, 165, 233, 0.4);
-}
-
-.btn-outline-primary {
-    border-color: var(--primary-color);
-    color: var(--primary-color);
-}
-
-.btn-outline-primary:hover {
-    background: var(--primary-color);
-    color: white;
+    background: var(--primary-hover);
+    transform: translateY(-1px);
 }
 
 /* 5. Call Room Specifics */
@@ -114,22 +95,14 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 1.5rem;
-    font-size: 1.1rem;
-    line-height: 1.8;
 }
 
-/* 6. Lead Info Highlights */
-#lead-info h3 {
-    color: var(--primary-color);
+/* 6. Animations */
+.fade-in {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
 }
 
-.badge {
-    padding: 0.5em 0.8em;
-    border-radius: 6px;
-    font-weight: 600;
-}
-
-/* 7. Animations */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -142,92 +115,41 @@ body {
     }
 }
 
-.fade-in {
-    animation: fadeInUp 0.6s ease-out forwards;
-}
-
-/* 8. Table Styling */
+/* 7. Table Styling */
 .table {
-    color: var(--text-main);
-}
-
-.table-light {
-    background-color: var(--surface-lighter) !important;
     color: var(--text-main) !important;
 }
 
 .table th {
-    border-bottom: 2px solid var(--border-color);
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
     color: var(--text-muted);
+    border-bottom: 2px solid var(--border-color);
 }
 
 .table td {
-    vertical-align: middle;
     border-bottom: 1px solid var(--border-color);
 }
 
-.table-hover tbody tr:hover {
-    background-color: rgba(255, 255, 255, 0.02);
-}
-
-/* 9. Input & Form Styling */
+/* 8. Input & Form Styling */
 .form-control,
 .form-select {
-    background-color: var(--surface-lighter);
-    border: 1px solid var(--border-color);
-    color: var(--text-main);
+    background-color: var(--surface-lighter) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-main) !important;
     border-radius: 10px;
 }
 
-.form-control:focus,
-.form-select:focus {
-    background-color: var(--surface-lighter);
-    border-color: var(--primary-color);
+/* Dark Mode fixes for Bootstrap helpers */
+.bg-light,
+.bg-white {
+    background-color: var(--surface-color) !important;
+    color: var(--text-main) !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     color: var(--text-main);
-    box-shadow: 0 0 0 0.25rem rgba(14, 165, 233, 0.25);
-}
-
-.input-group-text {
-    background-color: var(--surface-color);
-    border-color: var(--border-color);
-    color: var(--text-muted);
-}
-
-/* 10. Landing Page Hero */
-.hero-section {
-    padding: 100px 0;
-    background: radial-gradient(circle at top right, rgba(14, 165, 233, 0.1), transparent),
-        radial-gradient(circle at bottom left, rgba(3, 105, 161, 0.1), transparent);
-}
-
-.hero-title {
-    font-size: 3.5rem;
-    font-weight: 800;
-    background: linear-gradient(to bottom right, #fff, #94a3b8);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 1.5rem;
-}
-
-/* 11. Alerts */
-.alert {
-    background: var(--surface-lighter);
-    border: 1px solid var(--border-color);
-    color: var(--text-main);
-}
-
-.alert-info {
-    border-left: 4px solid var(--primary-color);
-}
-
-.alert-success {
-    border-left: 4px solid var(--accent-success);
-}
-
-.alert-danger {
-    border-left: 4px solid var(--accent-error);
 }

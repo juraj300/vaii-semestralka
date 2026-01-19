@@ -69,7 +69,10 @@
                              <label class="btn btn-outline-danger" for="outcome4">Closed Lost</label>
                         </div>
 
-                        <div>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#followupModal">
+                                <i class="bi bi-calendar-event"></i> Schedule Follow-up
+                            </button>
                             <button type="button" id="save-call-btn" class="btn btn-primary" onclick="window.saveCall()">Save & Next</button>
                             <a href="<?= $link->url('lead.index') ?>" class="btn btn-secondary">Exit Room</a>
                         </div>
@@ -79,6 +82,59 @@
         </div>
     </div>
 </div>
+
+<!-- Schedule Follow-up Modal -->
+<div class="modal fade" id="followupModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark border-secondary">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title">Schedule Follow-up</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="followup-form">
+                    <div class="mb-3">
+                        <label class="form-label text-light">Date & Time</label>
+                        <input type="datetime-local" class="form-control" name="start_at" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-light">Short Note</label>
+                        <input type="text" class="form-control" name="title" placeholder="e.g. Discuss Q4 budget" value="Follow-up: <?= htmlspecialchars($lead->company) ?>">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="window.saveFollowup()">Save Appointment</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.saveFollowup = async function() {
+        const form = document.getElementById('followup-form');
+        const formData = new FormData(form);
+        formData.append('lead_id', '<?= $lead->id ?>');
+        formData.append('csrf_token', CSRF_TOKEN);
+
+        try {
+            const response = await fetch("<?= $link->url('calendar.save') ?>", {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            if (result.success) {
+                alert('Appointment scheduled!');
+                bootstrap.Modal.getInstance(document.getElementById('followupModal')).hide();
+            } else {
+                alert('Error: ' + (result.error || 'Unknown error'));
+            }
+        } catch (e) {
+            alert('Failed to save appointment');
+        }
+    };
+</script>
 
 <!-- URLs for JS -->
 <script>
