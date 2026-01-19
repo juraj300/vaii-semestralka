@@ -8,6 +8,7 @@ use Exception;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 use Framework\Http\Responses\ViewResponse;
+use App\Models\User;
 
 /**
  * Class AuthController
@@ -69,5 +70,48 @@ class AuthController extends SecureController
     {
         $this->app->getAuthenticator()->logout();
         return $this->html();
+    }
+
+    /**
+     * Handles user registration.
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function register(Request $request): Response
+    {
+        $message = null;
+        if ($request->isPost()) {
+            $name = $request->value('name');
+            $email = $request->value('email');
+            $password = $request->value('password');
+
+            // Basic validation
+            if (empty($name) || empty($email) || empty($password)) {
+                $message = "All fields are required.";
+            } else {
+                // Check if email already exists
+                $existingUser = User::getAll('email = ?', [$email]);
+                if (!empty($existingUser)) {
+                    $message = "Email is already registered.";
+                } else {
+                    try {
+                        $user = new User();
+                        $user->name = $name;
+                        $user->email = $email;
+                        $user->password = password_hash($password, PASSWORD_DEFAULT);
+                        $user->role = 'agent'; // Default role
+                        $user->save();
+
+                        // Auto-login or redirect to login
+                        return $this->redirect($this->url('auth.login', ['message' => 'Registration successful. Please login.']));
+                    } catch (Exception $e) {
+                        $message = "Registration failed: " . $e->getMessage();
+                    }
+                }
+            }
+        }
+
+        return $this->html(compact('message'));
     }
 }

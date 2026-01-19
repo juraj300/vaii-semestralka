@@ -14,8 +14,14 @@ class ScriptController extends SecureController
         if (!parent::authorize($request, $action)) {
             return false;
         }
-        // Only Admin can manage scripts
-        return $this->user->getIdentity()->isAdmin();
+
+        // Agents can only see the list of scripts
+        if ($action === 'index') {
+            return true;
+        }
+
+        // Only Admin can manage scripts (create, edit, delete)
+        return $this->app->getAppUser()->getIdentity()->isAdmin();
     }
 
     public function index(Request $request): Response

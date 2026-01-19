@@ -37,11 +37,9 @@
         <?php if ($user->isLoggedIn()) { ?>
             <span class="navbar-text">Logged in user: <b><?= $user->getName() ?></b></span>
             <ul class="navbar-nav ms-auto">
-                <?php if ($user->getIdentity()->isAdmin()) { ?>
                 <li class="nav-item">
                      <a class="nav-link" href="<?= $link->url('script.index') ?>">Scripts</a>
                 </li>
-                <?php } ?>
                 <li class="nav-item">
                      <a class="nav-link" href="<?= $link->url('lead.index') ?>">Leads</a>
                 </li>
@@ -53,6 +51,9 @@
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="<?= App\Configuration::LOGIN_URL ?>">Log in</a>
+                </li>
+                <li class="nav-item">
+                     <a class="nav-link" href="<?= $link->url('auth.register') ?>">Register</a>
                 </li>
             </ul>
         <?php } ?>
