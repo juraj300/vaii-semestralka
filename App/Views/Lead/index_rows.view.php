@@ -1,6 +1,10 @@
 <?php
 /** @var array $leads */
 /** @var \Framework\Support\LinkGenerator $link */
+/** @var \Framework\Support\View $view */
+if (isset($no_layout) && $no_layout) {
+    $view->setLayout(null);
+}
 ?>
 <?php foreach ($leads as $lead): ?>
     <tr>

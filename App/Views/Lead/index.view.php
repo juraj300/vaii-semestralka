@@ -28,22 +28,24 @@
     </div>
 </div>
 
-<div class="table-responsive">
-    <table class="table table-hover table-striped">
-        <thead>
-        <tr>
-            <th>Company</th>
-            <th>Contact Name</th>
-            <th>Phone</th>
-            <th>Status</th>
-            <th>Next Follow-up</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody id="leads-table-body">
-        <?php include "index_rows.view.php"; ?>
-        </tbody>
-    </table>
+<div class="card shadow-sm mt-3">
+    <div class="table-responsive">
+        <table class="table table-hover table-striped">
+            <thead>
+            <tr>
+                <th>Company</th>
+                <th>Contact Name</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Next Follow-up</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="leads-table-body">
+            <?php include "index_rows.view.php"; ?>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>

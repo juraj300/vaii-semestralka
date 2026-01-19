@@ -258,6 +258,8 @@ class LeadController extends SecureController
             $params[] = $this->user->getIdentity()->id;
         }
 
-        return $this->html(compact('leads'), 'index_rows');
+        $leads = \App\Models\Lead::getAll($where, $params);
+
+        return $this->html(['leads' => $leads, 'no_layout' => true], 'index_rows');
     }
 }
