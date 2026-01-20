@@ -122,4 +122,34 @@ class CallController extends SecureController
             'script_body' => $scriptBody
         ]);
     }
+
+    public function generateTalkingPoints(Request $request): Response
+    {
+        try {
+            $id = $request->value('lead_id');
+            $lead = Lead::getOne($id);
+            if (!$lead) {
+                return new JsonResponse(['success' => false, 'error' => 'Lead not found']);
+            }
+
+            $currentScriptBody = $request->value('script_body') ?? '';
+            
+            $gemini = new \App\Services\GeminiService();
+            $points = $gemini->generateTalkingPoints([
+                'company' => $lead->company,
+                'website' => $lead->website,
+                'background_info' => $lead->background_info
+            ], $currentScriptBody);
+
+            return new JsonResponse([
+                'success' => true,
+                'talking_points' => $points
+            ]);
+        } catch (\Throwable $e) {
+            return new JsonResponse([
+                'success' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
 }

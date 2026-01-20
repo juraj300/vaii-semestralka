@@ -49,6 +49,8 @@ class LeadController extends SecureController
         $contact_name = $request->value('contact_name');
         $phone = $request->value('phone');
         $email = $request->value('email');
+        $website = $request->value('website');
+        $background_info = $request->value('background_info');
 
         $errors = [];
         if (empty($company)) $errors[] = "Company is required";
@@ -73,6 +75,8 @@ class LeadController extends SecureController
         $lead->contact_name = $contact_name;
         $lead->phone = $phone;
         $lead->email = $email;
+        $lead->website = $website;
+        $lead->background_info = $background_info;
         $lead->owner_id = $this->user->getIdentity()->id;
         $lead->status = Lead::STATUS_NEW;
         $lead->save();
@@ -108,6 +112,8 @@ class LeadController extends SecureController
         $contact_name = $request->value('contact_name');
         $phone = $request->value('phone');
         $email = $request->value('email');
+        $website = $request->value('website');
+        $background_info = $request->value('background_info');
         $status = $request->value('status');
 
         $errors = [];
@@ -129,6 +135,8 @@ class LeadController extends SecureController
         $lead->contact_name = $contact_name;
         $lead->phone = $phone;
         $lead->email = $email;
+        $lead->website = $website;
+        $lead->background_info = $background_info;
         $lead->status = $status;
         $lead->save();
 
@@ -211,10 +219,10 @@ class LeadController extends SecureController
                 } else {
                     $handle = fopen($file['tmp_name'], 'r');
                     $headers = fgetcsv($handle);
-                    $expected = ['company', 'contact_name', 'phone', 'email'];
+                    $expected = ['company', 'contact_name', 'phone', 'email', 'website', 'background_info'];
                     
                     if (!$headers || count(array_intersect($expected, $headers)) < 3) {
-                        $errors[] = "CSV must have headers: company, contact_name, phone, email.";
+                        $errors[] = "CSV must have headers: company, contact_name, phone. Optional: email, website, background_info.";
                     } else {
                         $headerMap = array_flip($headers);
                         while (($row = fgetcsv($handle)) !== false) {
@@ -225,6 +233,8 @@ class LeadController extends SecureController
                             $lead->contact_name = $row[$headerMap['contact_name']] ?? '';
                             $lead->phone = $row[$headerMap['phone']] ?? '';
                             $lead->email = $row[$headerMap['email']] ?? null;
+                            $lead->website = $row[$headerMap['website']] ?? null;
+                            $lead->background_info = $row[$headerMap['background_info']] ?? null;
                             $lead->owner_id = $this->user->getIdentity()->id;
                             $lead->status = \App\Models\Lead::STATUS_NEW;
 

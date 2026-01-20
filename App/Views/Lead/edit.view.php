@@ -40,6 +40,16 @@ use App\Models\Lead;
     </div>
 
     <div class="mb-3">
+        <label for="website" class="form-label">Website URL</label>
+        <input type="url" class="form-control" id="website" name="website" value="<?= htmlspecialchars($lead->website ?? '') ?>" placeholder="https://example.com">
+    </div>
+
+    <div class="mb-3">
+        <label for="background_info" class="form-label">Background Info / Context</label>
+        <textarea class="form-control" id="background_info" name="background_info" rows="3" placeholder="Any specific context for the AI..."><?= htmlspecialchars($lead->background_info ?? '') ?></textarea>
+    </div>
+
+    <div class="mb-3">
         <label for="status" class="form-label">Status</label>
         <select class="form-select" id="status" name="status">
             <?php foreach (Lead::getStatuses() as $status): ?>

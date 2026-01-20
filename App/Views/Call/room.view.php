@@ -10,18 +10,31 @@
             <div class="card-header bg-primary text-white">
                 <h5 class="card-title mb-0">Lead Details</h5>
             </div>
-            <div class="card-body" id="lead-info">
+            <div class="card-body text-white" id="lead-info">
                 <h3><span id="lead-company"><?= htmlspecialchars($lead->company) ?></span></h3>
                 <p><strong>Contact:</strong> <span id="lead-contact"><?= htmlspecialchars($lead->contact_name) ?></span></p>
-                <p><strong>Phone:</strong> <a href="tel:<?= htmlspecialchars($lead->phone) ?>" id="lead-phone-link"><span id="lead-phone"><?= htmlspecialchars($lead->phone) ?></span></a></p>
+                <p><strong>Phone:</strong> <a href="tel:<?= htmlspecialchars($lead->phone) ?>" id="lead-phone-link" class="text-white"><span id="lead-phone"><?= htmlspecialchars($lead->phone) ?></span></a></p>
                 <p><strong>Email:</strong> <span id="lead-email"><?= htmlspecialchars($lead->email) ?></span></p>
                 <hr>
-                <h6>Talking Points (Heuristics)</h6>
-                <ul id="talking-points" class="small text-muted">
-                    <li>Mention recent industry trends.</li>
-                    <li>Ask about current solution for XYZ.</li>
-                    <li>Offer free audit.</li>
-                </ul>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="mb-0">Talking Points</h6>
+                    <button type="button" id="ai-research-btn" class="btn btn-sm btn-outline-primary" onclick="window.generateAIPoints()">
+                        <i class="bi bi-stars"></i> Research AI
+                    </button>
+                </div>
+                
+                <div id="ai-loading" class="text-center d-none my-3">
+                    <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                    <span class="ms-2 small">Gemini is researching...</span>
+                </div>
+
+                <div id="ai-talking-points" class="small text-main">
+                    <ul id="talking-points" class="text-muted">
+                        <li>Mention recent industry trends.</li>
+                        <li>Ask about current solution for XYZ.</li>
+                        <li>Offer free audit.</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -140,7 +153,55 @@
 <script>
     const LOG_CALL_URL = "<?= $link->url('call.logCall') ?>";
     const NEXT_LEAD_URL = "<?= $link->url('call.nextLead') ?>";
+    const GEN_POINTS_URL = "<?= $link->url('call.generateTalkingPoints') ?>";
     const LEAD_INDEX_URL = "<?= $link->url('lead.index') ?>";
     const ALL_SCRIPTS = <?= json_encode($scripts ?? []) ?>;
     const CSRF_TOKEN = "<?= \App\Auth\Csrf::getToken() ?>";
+
+    window.generateAIPoints = async function() {
+        const btn = document.getElementById('ai-research-btn');
+        const loading = document.getElementById('ai-loading');
+        const results = document.getElementById('ai-talking-points');
+        const scriptBody = document.getElementById('script-body').innerText;
+        const leadId = document.getElementById('call-room-container').dataset.currentLeadId;
+
+        btn.disabled = true;
+        loading.classList.remove('d-none');
+        results.classList.add('opacity-50');
+
+        try {
+            const formData = new FormData();
+            formData.append('lead_id', leadId);
+            formData.append('script_body', scriptBody);
+            formData.append('csrf_token', CSRF_TOKEN);
+
+            const response = await fetch(GEN_POINTS_URL, {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                // Simple markdown to HTML (bullets)
+                let html = result.talking_points
+                    .replace(/\n\n/g, '<br>')
+                    .replace(/\* (.*)/g, '<li>$1</li>')
+                    .replace(/- (.*)/g, '<li>$1</li>');
+                
+                if (html.includes('<li>')) {
+                    html = '<ul class="ps-3 mb-0">' + html + '</ul>';
+                }
+                
+                results.innerHTML = html;
+            } else {
+                results.innerHTML = `<div class="text-danger small">${result.error}</div>`;
+            }
+        } catch (e) {
+            results.innerHTML = `<div class="text-danger small">Network error occurred.</div>`;
+        } finally {
+            btn.disabled = false;
+            loading.classList.add('d-none');
+            results.classList.remove('opacity-50');
+        }
+    };
 </script>

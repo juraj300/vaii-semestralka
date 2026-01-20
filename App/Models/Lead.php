@@ -11,6 +11,8 @@ class Lead extends Model
     public string $contact_name;
     public ?string $email;
     public string $phone;
+    public ?string $website = null;
+    public ?string $background_info = null;
     public string $status;
     public ?int $owner_id;
     public string $created_at;

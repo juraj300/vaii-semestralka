@@ -35,6 +35,16 @@
             <input type="email" class="form-control" id="email" name="email">
         </div>
     </div>
+
+    <div class="mb-3">
+        <label for="website" class="form-label">Website URL</label>
+        <input type="url" class="form-control" id="website" name="website" placeholder="https://example.com">
+    </div>
+
+    <div class="mb-3">
+        <label for="background_info" class="form-label">Background Info / Context</label>
+        <textarea class="form-control" id="background_info" name="background_info" rows="3" placeholder="Any specific context for the AI..."></textarea>
+    </div>
     
     <div class="mt-3">
         <button type="submit" class="btn btn-primary">Save Lead</button>
