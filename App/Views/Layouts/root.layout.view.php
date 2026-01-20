@@ -55,14 +55,14 @@
                 <?php } ?>
             </ul>
             
-            <div class="navbar-nav ms-auto align-items-center">
+            <div class="navbar-nav ms-auto align-items-center flex-row gap-2 mt-3 mt-lg-0">
                 <?php if ($user->isLoggedIn()) { ?>
-                    <span class="navbar-text me-3 d-none d-xl-inline">
+                    <span class="navbar-text me-2 d-none d-md-inline">
                          <?= htmlspecialchars($user->getName()) ?>
                     </span>
                     <a href="<?= $link->url('auth.logout') ?>" class="btn btn-outline-danger btn-sm">Log out</a>
                 <?php } else { ?>
-                    <a class="nav-link me-3" href="<?= App\Configuration::LOGIN_URL ?>">Log in</a>
+                    <a class="nav-link px-2" href="<?= App\Configuration::LOGIN_URL ?>">Log in</a>
                     <a href="<?= $link->url('auth.register') ?>" class="btn btn-primary btn-sm">Join</a>
                 <?php } ?>
             </div>

@@ -66,17 +66,18 @@ h4,
 
 /* 3. Hero & Content */
 .hero-title {
-    font-size: 4rem;
+    font-size: clamp(2.5rem, 8vw, 4rem);
     font-weight: 800;
     background: linear-gradient(135deg, #fff 0%, #38bdf8 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     line-height: 1.1;
+    margin-bottom: 1.5rem !important;
 }
 
 .lead.text-muted {
-    font-size: 1.25rem;
+    font-size: clamp(1rem, 4vw, 1.25rem);
     color: var(--text-muted) !important;
     max-width: 700px;
     margin-left: auto;
@@ -88,8 +89,20 @@ h4,
     background: var(--surface-color) !important;
     border: 1px solid var(--border-color) !important;
     border-radius: 20px !important;
-    padding: 1.5rem !important;
+    padding: clamp(1rem, 5vw, 1.5rem) !important;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+@media (max-width: 768px) {
+    .container-fluid {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+
+    .hero-section {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
 }
 
 .card h4 {

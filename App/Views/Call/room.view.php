@@ -4,8 +4,8 @@
 /** @var \Framework\Support\LinkGenerator $link */
 ?>
 
-<div class="row" id="call-room-container" data-current-lead-id="<?= $lead->id ?>">
-    <div class="col-md-4">
+<div class="row g-4" id="call-room-container" data-current-lead-id="<?= $lead->id ?>">
+    <div class="col-lg-5 col-xl-4">
         <div class="card mb-3">
             <div class="card-header bg-primary text-white">
                 <h5 class="card-title mb-0">Lead Details</h5>
@@ -27,7 +27,7 @@
                     <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
                     <span class="ms-2 small">Gemini is researching...</span>
                 </div>
-
+ 
                 <div id="ai-talking-points" class="small text-main">
                     <ul id="talking-points" class="text-muted">
                         <li>Mention recent industry trends.</li>
@@ -38,8 +38,8 @@
             </div>
         </div>
     </div>
-
-    <div class="col-md-8">
+ 
+    <div class="col-lg-7 col-xl-8">
         <div class="card mb-3">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Call Script</h5>
@@ -67,8 +67,8 @@
                         <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
                     </div>
                     
-                    <div class="d-flex justify-content-between">
-                        <div class="btn-group" role="group">
+                    <div class="d-flex flex-column flex-xl-row justify-content-between gap-3">
+                        <div class="btn-group flex-wrap" role="group">
                              <input type="radio" class="btn-check" name="outcome" id="outcome1" value="contacted" autocomplete="off" checked>
                              <label class="btn btn-outline-info" for="outcome1">Contacted</label>
 
@@ -82,12 +82,12 @@
                              <label class="btn btn-outline-danger" for="outcome4">Closed Lost</label>
                         </div>
 
-                        <div class="d-flex gap-2">
-                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#followupModal">
-                                <i class="bi bi-calendar-event"></i> Schedule Follow-up
+                        <div class="d-flex flex-wrap flex-sm-nowrap gap-2">
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#followupModal">
+                                <i class="bi bi-calendar-event"></i> Follow-up
                             </button>
-                            <button type="button" id="save-call-btn" class="btn btn-primary" onclick="window.saveCall()">Save & Next</button>
-                            <a href="<?= $link->url('lead.index') ?>" class="btn btn-secondary">Exit Room</a>
+                            <button type="button" id="save-call-btn" class="btn btn-sm btn-primary" onclick="window.saveCall()">Save & Next</button>
+                            <a href="<?= $link->url('lead.index') ?>" class="btn btn-sm btn-secondary">Exit</a>
                         </div>
                     </div>
                 </form>

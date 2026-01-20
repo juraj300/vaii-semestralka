@@ -5,15 +5,15 @@
 
 <div class="fade-in">
     <div class="row align-items-center mb-4">
-        <div class="col-md-6">
-            <h1>My Leads</h1>
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            <h1 class="mb-0">My Leads</h1>
         </div>
-        <div class="col-md-6 text-end">
-            <a href="<?= $link->url('lead.import') ?>" class="btn btn-outline-primary me-2">
-                <i class="bi bi-file-earmark-spreadsheet"></i> Import CSV
+        <div class="col-sm-6 text-sm-end d-flex gap-2 justify-content-sm-end">
+            <a href="<?= $link->url('lead.import') ?>" class="btn btn-sm btn-outline-primary flex-fill flex-sm-none">
+                <i class="bi bi-file-earmark-spreadsheet"></i> Import
             </a>
-            <a href="<?= $link->url('lead.create') ?>" class="btn btn-primary">
-                <i class="bi bi-plus-lg"></i> Add New Lead
+            <a href="<?= $link->url('lead.create') ?>" class="btn btn-sm btn-primary flex-fill flex-sm-none">
+                <i class="bi bi-plus-lg"></i> Add New
             </a>
         </div>
     </div>
