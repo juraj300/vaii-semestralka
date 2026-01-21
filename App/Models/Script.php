@@ -18,4 +18,9 @@ class Script extends Model
         $defaults = self::getAll("is_default = 1", [], "id DESC", 1);
         return !empty($defaults) ? $defaults[0] : null;
     }
+
+    public static function unsetDefaults(): void
+    {
+        self::executeRawSQL("UPDATE `" . self::getTableName() . "` SET is_default = 0");
+    }
 }

@@ -30,10 +30,34 @@ h1,
 h2,
 h3,
 h4,
+h5,
+h6,
+label,
+.form-label,
 .hero-title {
     font-family: 'Outfit', sans-serif;
     letter-spacing: -0.02em;
     color: var(--text-main) !important;
+}
+
+::placeholder {
+    color: var(--text-muted) !important;
+    opacity: 0.8 !important;
+}
+
+p {
+    color: var(--text-main);
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+a:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
 }
 
 /* 2. Navbar Styling */
@@ -212,4 +236,29 @@ h4,
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* 9. Auth Pages Deep Fix */
+.card-signin,
+.card,
+.form-signin {
+    color: #ffffff !important;
+}
+
+.card-signin h5,
+.card-signin label,
+.card h2,
+.card h5,
+.card label {
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+.form-control {
+    color: #ffffff !important;
+}
+
+.form-control::placeholder {
+    color: #8b949e !important;
+    opacity: 1 !important;
 }

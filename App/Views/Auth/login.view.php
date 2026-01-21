@@ -12,7 +12,7 @@ $view->setLayout('auth');
         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div class="card card-signin my-5">
                 <div class="card-body">
-                    <h5 class="card-title text-center">Username</h5>
+                    <h5 class="card-title text-center mb-4">Login</h5>
                     <div class="text-center text-danger mb-3">
                         <?= @$message ?>
                     </div>
@@ -35,6 +35,9 @@ $view->setLayout('auth');
                         </div>
                     </form>
                 </div>
+            </div>
+            <div class="text-center mt-3">
+                <p>Don't have an account? <a href="<?= $link->url('auth.register') ?>">Register here</a></p>
             </div>
         </div>
     </div>

@@ -20,7 +20,7 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="<?= $link->asset('css/styl.css') ?>?v=2">
+    <link rel="stylesheet" href="<?= $link->asset('css/styl.css') ?>?v=3">
     <script src="<?= $link->asset('js/script.js') ?>?v=2"></script>
 </head>
 <body class="dark-mode">
@@ -34,13 +34,13 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarMain">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                     <a class="nav-link" href="<?= $link->url('script.index') ?>">Scripts</a>
-                </li>
-                <li class="nav-item">
-                     <a class="nav-link" href="<?= $link->url('lead.index') ?>">Leads</a>
-                </li>
                 <?php if ($user->isLoggedIn()) { ?>
+                    <li class="nav-item">
+                         <a class="nav-link" href="<?= $link->url('script.index') ?>">Scripts</a>
+                    </li>
+                    <li class="nav-item">
+                         <a class="nav-link" href="<?= $link->url('lead.index') ?>">Leads</a>
+                    </li>
                     <li class="nav-item">
                          <a class="nav-link" href="<?= $link->url('calendar.index') ?>">Calendar</a>
                     </li>

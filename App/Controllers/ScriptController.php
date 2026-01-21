@@ -50,7 +50,7 @@ class ScriptController extends SecureController
         }
 
         if ($is_default) {
-            // Unset other defaults? Logic could be added here but simple for now.
+            Script::unsetDefaults();
         }
 
         $script = new Script();
@@ -87,6 +87,9 @@ class ScriptController extends SecureController
         $body = $request->value('body');
         $is_default = $request->value('is_default') ? 1 : 0;
 
+        if ($is_default) {
+            Script::unsetDefaults();
+        }
         $script->name = $name;
         $script->body = $body;
         $script->is_default = $is_default;
