@@ -44,9 +44,6 @@
                     <li class="nav-item">
                          <a class="nav-link" href="<?= $link->url('calendar.index') ?>">Calendar</a>
                     </li>
-                    <li class="nav-item">
-                         <a class="nav-link" href="<?= $link->url('file.index') ?>">Files</a>
-                    </li>
                     <?php if ($user->getIdentity()->isAdmin()) { ?>
                         <li class="nav-item">
                              <a class="nav-link" href="<?= $link->url('admin.index') ?>">Users</a>

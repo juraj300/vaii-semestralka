@@ -67,39 +67,3 @@ use App\Models\Lead;
     <?= \App\Auth\Csrf::input() ?>
 </form>
 
-<hr class="my-4">
-
-<h4>Attachments</h4>
-<div class="card mb-3">
-    <div class="card-body">
-        <form action="<?= $link->url('lead.upload') ?>" method="post" enctype="multipart/form-data" class="row g-3 align-items-center">
-            <input type="hidden" name="id" value="<?= $lead->id ?>">
-            <?= \App\Auth\Csrf::input() ?>
-            <div class="col-auto">
-                <input class="form-control" type="file" name="attachment" required>
-            </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-outline-primary">Upload</button>
-            </div>
-        </form>
-
-        <?php if (!empty($attachments)): ?>
-            <ul class="list-group mt-3">
-                <?php foreach ($attachments as $att): ?>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <a href="<?= $link->asset('uploads/' . $att->path) ?>" target="_blank">
-                            <i class="bi bi-file-earmark"></i> <?= htmlspecialchars($att->filename) ?>
-                        </a>
-                        <form action="<?= $link->url('lead.deleteAttachment') ?>" method="post" class="d-inline" onsubmit="return confirm('Delete file?');">
-                            <input type="hidden" name="id" value="<?= $att->id ?>">
-                            <?= \App\Auth\Csrf::input() ?>
-                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                        </form>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        <?php else: ?>
-            <p class="text-muted mt-2 mb-0">No attachments yet.</p>
-        <?php endif; ?>
-    </div>
-</div>

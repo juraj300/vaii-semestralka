@@ -51,8 +51,8 @@
                     <?php endforeach; ?>
                 </select>
             </div>
-            <div class="card-body bg-light">
-                <div id="script-body" class="p-3 border bg-white rounded">
+            <div class="card-body">
+                <div id="script-body" class="p-4 rounded border" style="background: rgba(0,0,0,0.2); color: var(--text-main); min-height: 400px; font-size: 1.1rem; border-color: var(--border-color) !important;">
                     <?= nl2br(htmlspecialchars($script->body ?? 'No script found.')) ?>
                 </div>
             </div>
